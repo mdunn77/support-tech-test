@@ -1,0 +1,28 @@
+{
+  "name": "support-tech-test",
+  "version": "1.0.0",
+  "description": "Sauce Labs Support Technical Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "working": "mocha ./test/workingSauce.js",
+    "broken": "mocha ./test/brokenSauce.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enriquegh/support-tech-test.git"
+  },
+  "author": "Sauce Labs Support",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enriquegh/support-tech-test/issues"
+  },
+  "homepage": "https://github.com/enriquegh/support-tech-test#readme",
+  "devDependencies": {
+    "mocha": "^8.0.1",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  },
+  "mocha": {
+    "timeout": 60000
+  }
+}

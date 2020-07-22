@@ -12,7 +12,7 @@ const workingCapabilities = {
     'platformName': 'macOS 10.15',
     'browserVersion': 'latest',
     'sauce:options': {
-        'name': 'Broken Google Search'
+        'name': 'Guinea-Pig Sauce'
     }
 };
 

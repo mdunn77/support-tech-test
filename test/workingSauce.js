@@ -1,4 +1,5 @@
 const {Builder, By, Key, until} = require('selenium-webdriver')
+const SauceLabs = require('saucelabs').default;
 const assert = require('assert');
 const utils = require('./utils')
 
@@ -17,7 +18,11 @@ const ONDEMAND_URL = `https://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.sau
 * Note that email will not actually be sent!
 *
 * Task IV - Add a capability that adds a tag to each test that is run.
-    * See this page for instructions: https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+* See this page for instructions: https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+* 
+* Bonus: Set the status of the test so it shows as "passed" instead of "complete".
+* We've included the node-saucelabs package already. For more info see:
+* https://github.com/saucelabs/node-saucelabs
 */
 
 describe('Working Sauce', function () {

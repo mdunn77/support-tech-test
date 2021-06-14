@@ -24,6 +24,10 @@ describe('Broken Sauce', function () {
                     .usingServer(ONDEMAND_URL).build();
 
         await driver.get("https://www.google.com");
+        // If you see a German or English GDPR modal on google.com you 
+        // will have to code around that or use the us-west-1 datacenter.
+        // You can investigate the modal elements using a Live Test(https://app.saucelabs.com/live/web-testing)
+
 
         let search = await driver.findElement(By.name("Search"));
         await search.sendKeys("Sauce Labs");

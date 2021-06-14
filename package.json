@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/enriquegh/support-tech-test#readme",
   "devDependencies": {
-    "mocha": "^8.2.1",
-    "saucelabs": "^4.4.3",
+    "mocha": "^9.0.0",
+    "saucelabs": "^5.1.0",
     "selenium-webdriver": "^4.0.0-alpha.7"
   },
   "mocha": {

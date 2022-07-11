@@ -4,11 +4,7 @@ stages:
   - test
 
 before_script:
-  - apk add --no-cache --virtual .build-deps make gcc g++ python
   - npm install
-
-after_script:
-  - apk del .build-deps
 
 test-node-14-6:
   stage: test

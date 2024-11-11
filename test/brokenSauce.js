@@ -3,41 +3,56 @@ const utils = require('./utils')
 
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME;
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY;
-const ONDEMAND_URL = `https://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.us-west-1.saucelabs.com:443/wd/hub`;
+//const ONDEMAND_URL = `https://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.eu-central-1.saucelabs.com/wd/hub`;
 // NOTE: Use the URL below if using our EU datacenter (e.g. logged in to app.eu-central-1.saucelabs.com)
-// const ONDEMAND_URL = `https://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.eu-central-1.saucelabs.com:443/wd/hub`;
+const ONDEMAND_URL = `https://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.eu-central-1.saucelabs.com:443/wd/hub`;
 
 
 /**
-* Run this test before working on the problem.
-* When you view the results on your dashboard, you'll see that the test "Failed".
-* Your job is to figure out why the test failed and make the changes necessary to make the test pass.
-* Once you get the test working, update the code so that when the test runs, it can reach the Sauce Labs homepage,
-* hover over 'Resources' and then clicks the 'Documentation' link
-*/
+ * Run this test before working on the problem.
+ * When you view the results on your dashboard, you'll see that the test "Failed".
+ * Your job is to figure out why the test failed and make the changes necessary to make the test pass.
+ * Once you get the test working, update the code so that when the test runs, it can reach the Sauce Labs homepage,
+ * hover over 'Resources' and then clicks the 'Documentation' link
+ */
 
 describe('Broken Sauce', function () {
     it('should go to Google and click Sauce', async function () {
-
+        let driver = await new Builder().withCapabilities(utils.brokenCapabilities)
+            .usingServer(ONDEMAND_URL).build();
         try {
-            let driver = await new Builder().withCapabilities(utils.brokenCapabilities)
-                    .usingServer(ONDEMAND_URL).build();
+            await driver.get("https://www.google.com");
+            // If you see a German or English GDPR modal on google.com you
+            // will have to code around that or use the us-west-1 datacenter.
+            // You can investigate the modal elements using a Live Test(https://app.saucelabs.com/live/web-testing)
 
-        await driver.get("https://www.google.com");
-        // If you see a German or English GDPR modal on google.com you 
-        // will have to code around that or use the us-west-1 datacenter.
-        // You can investigate the modal elements using a Live Test(https://app.saucelabs.com/live/web-testing)
+            let inputCookieAcceptance = await driver.findElement(By.id("L2AGLb"));
+            await inputCookieAcceptance.click()
+            let search = await driver.findElement(By.id("APjFqb"));
+            await search.sendKeys("Sauce Labs");
+
+            let button = await driver.findElement(By.name("btnK"))
+            await button.click()
+
+            let sauceLabsLink = await driver.findElement(By.partialLinkText("sauce"));
+            await sauceLabsLink.click();
+            await driver.findElement(By.id("onetrust-accept-btn-handler")).click()
+            let resourcesHeaderToHover = driver.findElement(By.xpath("//*[@id=\"__next\"]/header/div/div/div[1]/div[2]/div[5]/div[1]/div[1]/span"));
+            let actions = driver.actions({async: true});
+            await actions.move({origin: resourcesHeaderToHover}).perform();
+            let developersToHover = driver.findElement(By.xpath("//*[@id=\"__next\"]/header/div/div/div[1]/div[2]/div[4]/div[1]/div[1]/span"))
+            let actionsDevelopers = driver.actions({async:true});
+            await actionsDevelopers.move({origin:developersToHover}).perform();
+            let inputDocumentation = driver.findElement(By.xpath("//*[@id=\"__next\"]/header/div/div/div[1]/div[2]/div[4]/div[2]/div/div[1]/div[1]/div[2]/div[2]/div[1]/a/div/div[1]/div/div/span"));
+            await inputDocumentation.click();
 
 
-        let search = await driver.findElement(By.name("Search"));
-        await search.sendKeys("Sauce Labs");
-        
-        let button = await driver.findElement(By.name("btnK"))
-        await button.click()
-
-        let page = await driver.findElement(By.partialLinkText("sauce"));
-
-        await driver.quit();
+            //
+            // let inputDocumentation = await driver.findElement(By.linkText("Documentation"));
+            // await inputDocumentation.click();
+            await driver.executeScript(
+                'sauce:job-result=passed'
+            );
         } catch (err) {
             // hack to make this pass for Gitlab CI
             // candidates can ignore this
@@ -47,7 +62,8 @@ describe('Broken Sauce', function () {
             } else {
                 throw err;
             }
+        } finally {
+            await driver.quit();
         }
-
     });
 });
